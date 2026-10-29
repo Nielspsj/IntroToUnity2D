@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isFacingRight = true;
     private Animator animator;
     private string currentState;
+    private bool isDead = false;
 
     void Awake()
     {
@@ -85,6 +87,18 @@ public class PlayerMovement : MonoBehaviour
         jumpPressed = false;
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("collision: " + collision.transform.name);
+
+        if (collision.transform.tag == "Enemy")
+        {
+            Debug.Log("collision to enemy");
+
+            StartCoroutine(PlayerDeath());
+        }
+    }
+
     private void Flip()
     {
         if (isFacingRight && horizontalInput < 0f || !isFacingRight && horizontalInput > 0f)
@@ -92,6 +106,23 @@ public class PlayerMovement : MonoBehaviour
             isFacingRight = !isFacingRight;
             transform.Rotate(0f, 180f, 0f);
         }
+    }
+
+    
+    //Play death animation
+    //Restart level?
+    private IEnumerator PlayerDeath()
+    {
+        Debug.Log("Death");
+        isDead = true;
+        //Death animation
+        
+        //animator.Play("Player_Death");
+        yield return new WaitForSeconds(1);
+        
+        //Restart level if player death. Destroy object of not player
+       
+       
     }
 
     void OnDrawGizmosSelected()
@@ -105,7 +136,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateAnimations()
     {
-        if (horizontalInput != 0)
+        if (isDead == true)
+        {
+            ChangeAnimation("Player_Death");
+        }
+        else if (!isGrounded)
+        {
+            if (rigidBody.linearVelocityY > 0f)
+            {
+                ChangeAnimation("Player_Jump");
+            }
+            else if (rigidBody.linearVelocityY < 0f)
+            {
+                ChangeAnimation("Player_Fall");
+            }
+        }
+        else if (horizontalInput != 0)
         {
             //animator.Play("Player_Run");
             ChangeAnimation("Player_Run");
