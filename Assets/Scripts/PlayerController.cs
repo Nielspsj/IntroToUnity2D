@@ -1,6 +1,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -104,27 +105,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateAnimations()
     {
-        if (!isGrounded)
+        if (horizontalInput != 0)
         {
-            if (rigidBody.linearVelocityY > 0f)
-            {
-                ChangeAnimation("Player_Jump");
-            }
-            else if (rigidBody.linearVelocityY < 0f)
-            {
-                ChangeAnimation("Player_Fall");
-            }
-        }
-        else if (horizontalInput != 0)
-        {
+            //animator.Play("Player_Run");
             ChangeAnimation("Player_Run");
         }
         else
         {
+            //animator.Play("Player_Idle");
+
             ChangeAnimation("Player_Idle");
         }
     }
 
+    
     private void ChangeAnimation(string newState)
     {
         if(currentState  == newState)
@@ -135,4 +129,5 @@ public class PlayerMovement : MonoBehaviour
         animator.Play(newState);
         currentState = newState;        
     }
+    
 }
