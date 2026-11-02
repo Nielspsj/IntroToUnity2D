@@ -172,14 +172,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 669305207891764410, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
-      propertyPath: coyoteTime
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 669305207891764410, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
-      propertyPath: jumpBufferTime
-      value: 0.15
-      objectReference: {fileID: 0}
     - target: {fileID: 2211260717415047038, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.69321
@@ -224,14 +216,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 6064684980531444067, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7398401470040915281, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
+    - target: {fileID: 6631260713795315707, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 3d42be88f18d8f442970c58d70d67bcd, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1097,6 +1085,50 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!1 &1040411875
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1040411877}
+  - component: {fileID: 1040411876}
+  m_Layer: 0
+  m_Name: RestartManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1040411876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040411875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec01c3811e31fb544ab4ebee28f690a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RestartManager
+--- !u!4 &1040411877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040411875}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1423016803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,3 +1434,4 @@ SceneRoots:
   - {fileID: 1660503908}
   - {fileID: 683083647}
   - {fileID: 544113392}
+  - {fileID: 1040411877}
