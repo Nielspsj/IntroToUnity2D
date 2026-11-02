@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MarbleBagExample : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public class MarbleBagExample : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard.spaceKey.wasPressedThisFrame)
         {
             string outcome = critBag.Draw();
             Debug.Log($"Attack Result: {outcome} | Marbles left: {critBag.RemainingMarbles}");

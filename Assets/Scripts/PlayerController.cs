@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 7f;
@@ -12,6 +12,10 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
+
+    [Header("Coyote Time")]
+    public float coyoteTime = 0.15f;
+    private float coyoteTimeCountDown;
 
     private Rigidbody2D rigidBody;
     private float horizontalInput;
@@ -31,6 +35,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        //Are we dead? Then the rest of Update doesn't run and we can't move.
+        if(isDead == true)
+        {
+            return;
+        }
+
         ReadInput();
         Flip();
         UpdateAnimations();
@@ -47,12 +57,12 @@ public class PlayerMovement : MonoBehaviour
         // Read movement input.
         horizontalInput = 0f;
 
-        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+        if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
         {
             horizontalInput = -1f;
         }
             
-        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+        if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
         {
             horizontalInput = +1f;
         }
@@ -68,6 +78,12 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Are we dead? Then the rest of FixedUpdate doesn't run and we stop physics working on us.
+        if (isDead == true)
+        {
+            return;
+        }
+
         // Control horizontal movement.
         rigidBody.linearVelocity = new Vector2(horizontalInput * moveSpeed, rigidBody.linearVelocity.y);
 
@@ -75,10 +91,24 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         //Debug.Log("grounded?: " + isGrounded);
 
-        // Jump only when grounded.
-        if (jumpPressed && isGrounded)
+        // Refresh coyote time while grounded
+        if (isGrounded)
+        {
+            coyoteTimeCountDown = coyoteTime;
+        }
+        else
+        {
+            // Count down while in the air
+            coyoteTimeCountDown -= Time.fixedDeltaTime;
+        }
+
+        // Jump if we press jump and some coyote time remains
+        if (jumpPressed && coyoteTimeCountDown > 0f)
         {
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
+
+            // Consume coyote time so we cannot jump again
+            coyoteTimeCountDown = 0f;
         }
 
         // Consume the jump press after checking it.
@@ -87,9 +117,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("collision: " + collision.transform.name);
+        //Are we dead? Can't collide with stuff if dead.
+        if (isDead == true)
+        {
+            return;
+        }
 
-        if (collision.transform.tag == "Enemy")
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("collision to enemy");
 
@@ -111,14 +145,31 @@ public class PlayerMovement : MonoBehaviour
     //Restart level?
     private IEnumerator PlayerDeath()
     {
-        Debug.Log("Death");
+        //Are we dead? Clear stored inputs and stop the players movement.
+        if (isDead == true)
+        {
+            yield break;
+        }
+
+        //Debug.Log("Death");
         isDead = true;
+
+        // Clear any stored input.
+        horizontalInput = 0f;
+        jumpPressed = false;
+
+        // Stop the player's movement.
+        rigidBody.linearVelocity = Vector2.zero;
+        // gravity to 0 if you don't want the player to fall while dying.
+        //rigidBody.gravityScale = 0f;
+
         //Death animation
-        
+        ChangeAnimation("Player_Death");
+
         //animator.Play("Player_Death");
         yield return new WaitForSeconds(1);
         
-        //Restart level if player death. Destroy object of not player
+        //Restart level if player death. Destroy object if not player
        
        
     }
@@ -134,11 +185,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void UpdateAnimations()
     {
-        if (isDead == true)
-        {
-            ChangeAnimation("Player_Death");
-        }
-        else if (!isGrounded)
+        if (!isGrounded)
         {
             if (rigidBody.linearVelocityY > 0f)
             {

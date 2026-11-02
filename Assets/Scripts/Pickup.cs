@@ -3,8 +3,10 @@ using UnityEngine.Events;
 
 public class Pickup : MonoBehaviour
 {   
+    /*
     [SerializeField, Header("How many points this pickup is worth")]
     private int value = 10;
+    */
 
     [SerializeField, Header("Optional sound effect")]
     private AudioClip pickupSound;
