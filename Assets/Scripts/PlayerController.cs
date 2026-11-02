@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     public float coyoteTime = 0.15f;
     private float coyoteTimeCountDown;
 
+    [Header("Jump Buffer")]
+    public float jumpBufferTime = 0.15f;
+    private float jumpBufferCounDown;
+
     private Rigidbody2D rigidBody;
     private float horizontalInput;
     private bool jumpPressed;
@@ -102,12 +106,22 @@ public class PlayerController : MonoBehaviour
             coyoteTimeCountDown -= Time.fixedDeltaTime;
         }
 
+        if(jumpPressed == true)
+        {
+            jumpBufferCounDown = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounDown -= Time.fixedDeltaTime;
+        }
+
         // Jump if we press jump and some coyote time remains
-        if (jumpPressed && coyoteTimeCountDown > 0f)
+        if (jumpBufferCounDown > 0f && coyoteTimeCountDown > 0f)
         {
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
 
-            // Consume coyote time so we cannot jump again
+            // Reset both count downs so we cannot jump again
+            jumpBufferCounDown = 0f;
             coyoteTimeCountDown = 0f;
         }
 

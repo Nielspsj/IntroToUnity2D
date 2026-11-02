@@ -176,6 +176,10 @@ PrefabInstance:
       propertyPath: coyoteTime
       value: 0.15
       objectReference: {fileID: 0}
+    - target: {fileID: 669305207891764410, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
+      propertyPath: jumpBufferTime
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 2211260717415047038, guid: 7d775353dbae4a446a597cebe4717af7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.69321
